@@ -1,0 +1,18 @@
+[package]
+name        = "anthill-api"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anthill-core  = { workspace = true }
+anthill-db    = { workspace = true }
+tokio         = { workspace = true }
+tonic         = { workspace = true }
+prost         = { workspace = true }
+anyhow        = { workspace = true }
+tracing       = { workspace = true }
+serde         = { workspace = true }
+serde_json    = { workspace = true }
+
+[build-dependencies]
+tonic-build   = { workspace = true }

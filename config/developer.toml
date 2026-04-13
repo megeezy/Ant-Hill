@@ -1,0 +1,15 @@
+# Developer / Personal profile — merges on top of default.toml
+[profile]
+type = "developer"
+
+[response]
+mode = "confirm"   # Never auto-kill; FP kills break builds
+
+[queen.sandbox]
+pool_slots = 2     # Dev machines are resource-constrained
+
+[queen.ml]
+drift_threshold_kl = 0.25   # More lenient on dev machines
+
+[logging]
+level = "debug"

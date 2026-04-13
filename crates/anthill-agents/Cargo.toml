@@ -1,0 +1,25 @@
+[package]
+name        = "anthill-agents"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anthill-core      = { workspace = true }
+anthill-prefilter = { workspace = true }
+anthill-bus       = { workspace = true }
+tokio             = { workspace = true }
+tracing           = { workspace = true }
+anyhow            = { workspace = true }
+notify            = "6"       # cross-platform inotify / FSEvents wrapper
+sha2              = { workspace = true }
+hex               = { workspace = true }
+chrono            = { workspace = true }
+prost             = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+aya        = "0.13"           # eBPF loader
+aya-log    = "0.2"
+pcap       = "2"              # libpcap wrapper
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# FSEvents handled via notify crate — no extra dep needed in Phase 3

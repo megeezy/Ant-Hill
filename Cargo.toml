@@ -1,0 +1,95 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/anthill-core",
+    "crates/anthill-prefilter",
+    "crates/anthill-bus",
+    "crates/anthill-agents",
+    "crates/anthill-queen",
+    "crates/anthill-soldier",
+    "crates/anthill-db",
+    "crates/anthill-tui",
+    "crates/anthill-api",
+    "bin/anthill",
+]
+
+[workspace.package]
+version     = "0.1.0"
+edition     = "2021"
+authors     = ["Anthill Team"]
+license     = "MIT"
+repository  = "https://github.com/your-org/ant-hill"
+
+[workspace.dependencies]
+# Async runtime
+tokio       = { version = "1", features = ["full"] }
+tokio-stream = "0.1"
+
+# Serialisation
+prost       = "0.13"
+prost-types = "0.13"
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+toml        = "0.8"
+
+# gRPC
+tonic       = "0.12"
+tonic-build = "0.12"
+prost-build = "0.13"
+
+# Error handling
+anyhow      = "1"
+thiserror   = "1"
+
+# Logging / tracing
+tracing            = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Persistence
+rusqlite    = { version = "0.31", features = ["bundled"] }
+sled        = "0.34"
+
+# Hashing
+sha2        = "0.10"
+ssdeep      = "0.6"
+hex         = "0.4"
+
+# Concurrency
+dashmap     = "6"
+crossbeam-channel = "0.5"
+parking_lot = "0.12"
+
+# ML inference
+ort         = { version = "2.0.0-rc.9", features = ["load-dynamic"] }
+ndarray     = "0.16"
+
+# Crypto (model signing)
+ed25519-dalek = { version = "2", features = ["serde"] }
+rand          = "0.8"
+
+# Config
+config      = "0.14"
+directories = "5"
+
+# Time
+chrono      = { version = "0.4", features = ["serde"] }
+
+# Workspace crates
+anthill-core       = { path = "crates/anthill-core" }
+anthill-prefilter  = { path = "crates/anthill-prefilter" }
+anthill-bus        = { path = "crates/anthill-bus" }
+anthill-agents     = { path = "crates/anthill-agents" }
+anthill-queen      = { path = "crates/anthill-queen" }
+anthill-soldier    = { path = "crates/anthill-soldier" }
+anthill-db         = { path = "crates/anthill-db" }
+anthill-tui        = { path = "crates/anthill-tui" }
+anthill-api        = { path = "crates/anthill-api" }
+
+[profile.release]
+opt-level   = 3
+lto         = "thin"
+strip       = true
+codegen-units = 1
+
+[profile.dev]
+opt-level   = 1   # faster incremental builds, still usable perf

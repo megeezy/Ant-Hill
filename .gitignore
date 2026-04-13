@@ -1,0 +1,33 @@
+# Rust
+target/
+Cargo.lock
+
+# eBPF compiled objects
+ebpf/src/*.o
+ebpf/target/
+
+# Python ML pipeline
+ml/__pycache__/
+ml/*.pyc
+ml/.venv/
+ml/models/     # trained models go in releases, not git
+ml/datasets/   # datasets are large; store in DVC or S3
+
+# Anthill runtime artefacts
+/var/lib/anthill/
+*.vault
+*.ring
+
+# Config with secrets
+config/local.toml
+config/secrets.toml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db

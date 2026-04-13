@@ -1,0 +1,79 @@
+# Anthill — Default configuration
+# Loaded first; override with enterprise.toml, developer.toml, or local.toml
+
+[profile]
+type = "developer"   # enterprise | developer | personal
+
+[agent]
+file_monitor_enabled = true
+proc_monitor_enabled = true
+net_sniffer_enabled  = true
+mem_probe_enabled    = true
+scan_interval_ms     = 1000
+
+[prefilter]
+burst_threshold     = 50       # events before collapsing into FileBurstEvent
+dedup_window_ms     = 500
+max_confidence_drop = 0.10     # drop allowlisted events below this confidence
+
+[bus]
+channel_capacity    = 4096
+replay_file_max_mb  = 512
+replay_enabled      = true
+
+[queen]
+sig_weight     = 0.30
+beh_weight     = 0.35
+ml_weight      = 0.25
+box_weight     = 0.10
+clean_threshold      = 0.35
+quarantine_threshold = 0.70
+
+[queen.behaviour]
+window_5s_cap    = 1024   # ring buffer capacity per key
+window_30s_cap   = 1024
+window_5min_cap  = 2048
+window_30min_cap = 2048
+max_tracked_pids = 1000
+
+[queen.ml]
+model_path            = "/var/lib/anthill/models/current.onnx"
+model_meta_path       = "/var/lib/anthill/models/current.meta.json"
+drift_threshold_kl    = 0.15
+drift_sample_minimum  = 1000
+
+[queen.sandbox]
+enabled          = true
+backend          = "gvisor"    # gvisor | firecracker
+pool_slots       = 4
+queue_max        = 64
+verdict_timeout_s = 30
+fast_path_ml_threshold = 0.05  # skip sandbox if ml_conf < this AND trusted signer
+
+[response]
+mode = "confirm"   # auto | confirm | monitor   (overridden per profile)
+confirm_timeout_s = 300
+safe_default_on_timeout = "quarantine"
+
+[response.protected]
+allowlist_path = "/etc/anthill/allowlist.toml"
+
+[persistence]
+db_path         = "/var/lib/anthill/anthill.db"
+sled_path       = "/var/lib/anthill/cache"
+forensics_path  = "/var/lib/anthill/forensics"
+vault_path      = "/var/lib/anthill/vault"
+
+[tui]
+refresh_rate_ms  = 250
+event_stream_max = 200
+
+[api]
+enabled   = false
+listen    = "127.0.0.1:7474"
+tls_cert  = ""
+tls_key   = ""
+
+[logging]
+level  = "info"    # trace | debug | info | warn | error
+format = "pretty"  # pretty | json

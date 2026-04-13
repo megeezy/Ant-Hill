@@ -1,0 +1,14 @@
+[package]
+name        = "anthill-tui"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anthill-core    = { workspace = true }
+anthill-db      = { workspace = true }
+tokio           = { workspace = true }
+tokio-stream    = { workspace = true }
+anyhow          = { workspace = true }
+tracing         = { workspace = true }
+crossterm       = "0.28"
+ratatui         = "0.29"

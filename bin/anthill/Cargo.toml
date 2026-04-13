@@ -1,0 +1,23 @@
+[package]
+name        = "anthill"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "anthill"
+path = "src/main.rs"
+
+[dependencies]
+anthill-core    = { workspace = true }
+anthill-bus     = { workspace = true }
+anthill-agents  = { workspace = true }
+anthill-queen   = { workspace = true }
+anthill-soldier = { workspace = true }
+anthill-db      = { workspace = true }
+anthill-tui     = { workspace = true }
+anthill-api     = { workspace = true }
+tokio           = { workspace = true }
+tracing         = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow          = { workspace = true }
+clap            = { version = "4", features = ["derive"] }

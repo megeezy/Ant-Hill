@@ -1,0 +1,34 @@
+[package]
+name        = "anthill-queen"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anthill-core  = { workspace = true }
+anthill-bus   = { workspace = true }
+tokio         = { workspace = true }
+tracing       = { workspace = true }
+anyhow        = { workspace = true }
+thiserror     = { workspace = true }
+dashmap       = { workspace = true }
+parking_lot   = { workspace = true }
+serde         = { workspace = true }
+serde_json    = { workspace = true }
+sha2          = { workspace = true }
+hex           = { workspace = true }
+chrono        = { workspace = true }
+uuid          = { version = "1", features = ["v4"] }
+prost         = { workspace = true }
+
+# yara          = { version = "0.28", features = ["bundled"] } # DEFERRED to week 2
+
+# ML inference (Phase 3)
+ort           = { workspace = true, optional = true }
+ndarray       = { workspace = true, optional = true }
+
+# Ed25519 model signature verification
+ed25519-dalek = { workspace = true, optional = true }
+
+[features]
+default    = []
+ml         = ["dep:ort", "dep:ndarray", "dep:ed25519-dalek"]

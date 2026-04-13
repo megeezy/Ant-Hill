@@ -1,0 +1,16 @@
+[package]
+name        = "anthill-prefilter"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anthill-core      = { workspace = true }
+tokio             = { workspace = true }
+dashmap           = { workspace = true }
+tracing           = { workspace = true }
+anyhow            = { workspace = true }
+chrono            = { workspace = true }
+sha2              = { workspace = true }
+hex               = { workspace = true }
+serde             = { workspace = true }
+toml              = { workspace = true }

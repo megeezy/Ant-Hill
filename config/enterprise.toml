@@ -1,0 +1,15 @@
+# Enterprise profile — merges on top of default.toml
+[profile]
+type = "enterprise"
+
+[response]
+mode = "auto"   # No human in loop; speed > precision trade-off
+
+[queen.sandbox]
+pool_slots = 8   # Enterprise hosts typically have more cores
+
+[logging]
+format = "json"  # Structured logs for SIEM ingestion
+
+[api]
+enabled = true

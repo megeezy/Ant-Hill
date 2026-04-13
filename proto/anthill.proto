@@ -1,0 +1,188 @@
+syntax = "proto3";
+package anthill.v1;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enumerations
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum AgentType {
+    AGENT_UNKNOWN = 0;
+    AGENT_FILE    = 1;
+    AGENT_PROC    = 2;
+    AGENT_NET     = 3;
+    AGENT_MEM     = 4;
+}
+
+enum FileOp {
+    FILE_OP_UNKNOWN = 0;
+    FILE_CREATE     = 1;
+    FILE_WRITE      = 2;
+    FILE_RENAME     = 3;
+    FILE_DELETE     = 4;
+    FILE_CHMOD      = 5;
+}
+
+enum Verdict {
+    VERDICT_UNKNOWN    = 0;
+    VERDICT_CLEAN      = 1;   // score < 0.35
+    VERDICT_QUARANTINE = 2;   // score 0.35..0.70
+    VERDICT_KILL       = 3;   // score > 0.70
+}
+
+enum ResponseMode {
+    RESPONSE_AUTO    = 0;
+    RESPONSE_CONFIRM = 1;
+    RESPONSE_MONITOR = 2;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 1 — Raw sensor events
+// ─────────────────────────────────────────────────────────────────────────────
+
+message FileEvent {
+    string path      = 1;
+    string sha256    = 2;
+    uint32 pid       = 3;
+    uint32 uid       = 4;
+    FileOp operation = 5;
+    int64  timestamp = 6;   // Unix ms
+    float  entropy   = 7;   // Shannon entropy of file content
+}
+
+message ProcEvent {
+    uint32 pid        = 1;
+    uint32 ppid       = 2;
+    uint32 uid        = 3;
+    string comm       = 4;
+    string cmdline    = 5;
+    string exe_path   = 6;
+    int64  timestamp  = 7;
+    string syscall    = 8;   // execve | clone | ptrace | mmap
+}
+
+message NetEvent {
+    uint32 pid        = 1;
+    string src_ip     = 2;
+    uint32 src_port   = 3;
+    string dst_ip     = 4;
+    uint32 dst_port   = 5;
+    string proto      = 6;   // tcp | udp
+    string dns_query  = 7;
+    string tls_sni    = 8;
+    uint64 bytes_out  = 9;
+    int64  timestamp  = 10;
+}
+
+message MemEvent {
+    uint32 pid          = 1;
+    string region       = 2;
+    bool   exec_anon    = 3;   // executable anonymous mapping
+    bool   heap_exec    = 4;
+    string injected_lib = 5;
+    int64  timestamp    = 6;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 1.5 — Pre-filter burst collapse events
+// ─────────────────────────────────────────────────────────────────────────────
+
+message FileBurstEvent {
+    string    base_path       = 1;
+    uint32    count           = 2;
+    float     entropy_delta   = 3;   // avg entropy increase per file
+    AgentType source          = 4;
+    int64     window_start_ts = 5;
+    int64     window_end_ts   = 6;
+}
+
+message ProcBurstEvent {
+    uint32    ppid            = 1;
+    string    parent_comm     = 2;
+    uint32    child_count     = 3;
+    int64     window_start_ts = 4;
+    int64     window_end_ts   = 5;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 2 — Pheromone bus envelope
+// ─────────────────────────────────────────────────────────────────────────────
+
+message ThreatSignal {
+    AgentType source     = 1;
+    float     confidence = 2;   // 0.0 – 1.0
+    uint32    ttl_seconds = 3;
+    int64     ts         = 4;   // Unix ms
+
+    oneof event {
+        FileEvent      file_event      = 10;
+        ProcEvent      proc_event      = 11;
+        NetEvent       net_event       = 12;
+        MemEvent       mem_event       = 13;
+        FileBurstEvent file_burst      = 14;
+        ProcBurstEvent proc_burst      = 15;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 3 — Queen engine output
+// ─────────────────────────────────────────────────────────────────────────────
+
+message ThreatVerdict {
+    string  verdict_id     = 1;
+    Verdict verdict        = 2;
+    float   risk_score     = 3;
+    float   sig_confidence = 4;
+    float   beh_confidence = 5;
+    float   ml_confidence  = 6;
+    float   box_confidence = 7;
+    string  rule_ids       = 8;   // comma-separated MITRE IDs triggered
+    int64   ts             = 9;
+    string  subject_path   = 10;
+    uint32  subject_pid    = 11;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tier 4 — Response actions
+// ─────────────────────────────────────────────────────────────────────────────
+
+message ActionRequest {
+    string       verdict_id     = 1;
+    ThreatVerdict verdict       = 2;
+    ResponseMode mode           = 3;
+}
+
+message ActionResult {
+    string verdict_id    = 1;
+    bool   executed      = 2;
+    string action_taken  = 3;   // kill | hard_quarantine | soft_quarantine | block_net | monitor
+    bool   user_approved = 4;
+    int64  ts            = 5;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// gRPC management API (Tier 5)
+// ─────────────────────────────────────────────────────────────────────────────
+
+service AnthillControl {
+    rpc GetStatus      (StatusRequest)         returns (StatusResponse);
+    rpc ListThreats    (ListThreatsRequest)    returns (ListThreatsResponse);
+    rpc OverrideVerdict(OverrideRequest)       returns (OverrideResponse);
+    rpc ExportLogs     (ExportRequest)         returns (stream LogEntry);
+}
+
+message StatusRequest  {}
+message StatusResponse {
+    bool   queen_alive    = 1;
+    uint32 active_agents  = 2;
+    uint64 events_today   = 3;
+    uint32 threats_active = 4;
+}
+
+message ListThreatsRequest  { uint32 limit = 1; }
+message ListThreatsResponse { repeated ThreatVerdict verdicts = 1; }
+
+message OverrideRequest  { string verdict_id = 1; Verdict new_verdict = 2; string reason = 3; }
+message OverrideResponse { bool ok = 1; }
+
+message ExportRequest    { int64 since_ts = 1; }
+message LogEntry         { string line = 1; int64 ts = 2; }
