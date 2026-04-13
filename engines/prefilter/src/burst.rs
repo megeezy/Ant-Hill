@@ -7,9 +7,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 struct BurstBucket {
     count:           u32,
+    #[allow(dead_code)]
     entropy_sum:     f32,
+    #[allow(dead_code)]
     window_start_ts: i64,
+    #[allow(dead_code)]
     source:          i32,
+    #[allow(dead_code)]
     base_path:       String,
 }
 

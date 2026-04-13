@@ -49,7 +49,7 @@ impl SafetyChecker {
     }
 
     /// Compute the protection level for a process.
-    pub fn protection_level(&self, pid: u32, name: &str, uid: u32, ppid: u32) -> ProtectionLevel {
+    pub fn protection_level(&self, _pid: u32, name: &str, uid: u32, ppid: u32) -> ProtectionLevel {
         // Tier 1: immutable hardcoded list
         if IMMUTABLE_PROTECTED.contains(&name) {
             return ProtectionLevel::Inviolable;

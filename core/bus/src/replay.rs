@@ -24,6 +24,7 @@ impl ReplayRing {
     pub fn open(path: &Path, max_mb: u64) -> Result<Self> {
         let file = OpenOptions::new()
             .create(true)
+            .truncate(true)
             .write(true)
             .read(true)
             .open(path)?;

@@ -7,7 +7,7 @@ pub mod net_sniffer;
 pub mod proc_monitor;
 
 use anthill_core::config::AnthillConfig;
-use anthill_bus::{Bus, BusSender};
+use anthill_bus::Bus;
 use anyhow::Result;
 use tokio::task::JoinHandle;
 

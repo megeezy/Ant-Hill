@@ -68,7 +68,7 @@ impl QueenEngine {
         let ml_conf  = 0.0_f32;
         let box_conf = 0.0_f32;
 
-        let q = &self.cfg.queen;
+        let _q = &self.cfg.queen;
         self.correlator.score(sig_conf, beh_conf, ml_conf, box_conf, &signal)
     }
 }

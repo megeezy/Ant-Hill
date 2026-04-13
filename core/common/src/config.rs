@@ -8,18 +8,13 @@ use std::path::PathBuf;
 // Top-level profile
 // ─────────────────────────────────────────────────────────────────────────────
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
 #[serde(rename_all = "lowercase")]
 pub enum ProfileType {
     Enterprise,
+    #[default]
     Developer,
     Personal,
-}
-
-impl Default for ProfileType {
-    fn default() -> Self {
-        Self::Developer
-    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -27,21 +22,16 @@ impl Default for ProfileType {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// The three operating modes for the response layer.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Default)]
 #[serde(rename_all = "lowercase")]
 pub enum ResponseMode {
     /// Execute countermeasures immediately — no human in loop.
     Auto,
     /// Pause, show TUI dialog, await human approval (5-min timeout → safe default).
+    #[default]
     Confirm,
     /// Detect and log only. Zero destructive action. Ideal for onboarding / auditing.
     Monitor,
-}
-
-impl Default for ResponseMode {
-    fn default() -> Self {
-        Self::Confirm
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

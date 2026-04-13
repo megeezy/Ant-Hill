@@ -1,6 +1,6 @@
 //! TUI App state and main event loop.
 
-use anthill_core::RiskScore;
+// use anthill_core::RiskScore;
 use anthill_db::sqlite::VerdictRow;
 use crossterm::{
     event::{self, Event, KeyCode, KeyModifiers},

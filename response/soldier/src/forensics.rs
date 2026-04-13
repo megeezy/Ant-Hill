@@ -16,7 +16,7 @@ impl ForensicCapture {
     }
 
     /// Capture all available forensic data for `pid` and save to disk.
-    pub async fn capture(&self, pid: u32, file_path: &str, verdict: &str) -> Result<ForensicBundle> {
+    pub async fn capture(&self, pid: u32, file_path: &str, _verdict: &str) -> Result<ForensicBundle> {
         let verdict_id = Uuid::new_v4().to_string();
         let bundle_dir = self.output_dir.join(&verdict_id);
         tokio::fs::create_dir_all(&bundle_dir).await?;
@@ -54,12 +54,14 @@ impl ForensicCapture {
     }
 }
 
+#[allow(dead_code)]
 async fn read_proc_file(pid: u32, name: &str) -> String {
     tokio::fs::read_to_string(format!("/proc/{pid}/{name}"))
         .await
-        .unwrap_or_default()
+        .unwrap_or_else(|_| "n/a".into())
 }
 
+#[allow(dead_code)]
 async fn list_fds(pid: u32) -> Vec<String> {
     let fd_dir = format!("/proc/{pid}/fd");
     let mut fds = vec![];

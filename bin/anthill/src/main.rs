@@ -64,8 +64,8 @@ async fn main() -> Result<()> {
     info!(mode = ?cfg.response.mode, "response mode active");
 
     // ── Persistence ──────────────────────────────────────────────────────────
-    let db    = ThreatDb::open(&cfg.persistence)?;
-    let cache = PheromoneCache::open(&cfg.persistence, 3600)?;
+    let _db    = ThreatDb::open(&cfg.persistence)?;
+    let _cache = PheromoneCache::open(&cfg.persistence, 3600)?;
 
     // ── Bus ──────────────────────────────────────────────────────────────────
     let bus = Bus::new();
@@ -89,7 +89,7 @@ async fn main() -> Result<()> {
     info!("queen engine started");
 
     // ── Soldier response layer ────────────────────────────────────────────────
-    let tui_tx_soldier = tui_tx.clone();
+    let _tui_tx_soldier = tui_tx.clone();
     let soldier_cfg    = cfg.response.clone();
     let persist_cfg    = cfg.persistence.clone();
     tokio::spawn(async move {

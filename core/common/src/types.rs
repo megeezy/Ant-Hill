@@ -72,6 +72,7 @@ impl RiskScore {
 }
 
 impl RiskScore {
+    #[allow(clippy::too_many_arguments)]
     pub fn compute(
         verdict_id: String, pid: u32, subject_path: String,
         sig_conf: f32, beh_conf: f32, ml_conf: f32, box_conf: f32,

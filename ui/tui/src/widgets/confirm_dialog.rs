@@ -13,7 +13,7 @@ use ratatui::{
 use crate::app::{App, TuiEvent};
 
 pub fn draw(f: &mut Frame, app: &App, area: Rect) {
-    let Some(TuiEvent::ConfirmRequest { verdict_id, path, score, reason }) =
+    let Some(TuiEvent::ConfirmRequest { verdict_id: _verdict_id, path, score, reason }) =
         app.confirm_queue.first()
     else {
         return;

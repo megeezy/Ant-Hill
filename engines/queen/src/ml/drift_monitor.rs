@@ -46,6 +46,7 @@ fn kl_divergence(p: &FeatureHistogram, q: &FeatureHistogram) -> f64 {
 pub struct DriftMonitor {
     baseline:         FeatureHistogram,
     live_counts:      Vec<u64>,
+    #[allow(dead_code)]
     n_bins:           usize,
     sample_count:     usize,
     threshold_kl:     f64,

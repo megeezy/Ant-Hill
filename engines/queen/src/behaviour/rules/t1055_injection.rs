@@ -4,7 +4,7 @@
 //! on the same target PID.
 
 use anthill_core::{proto::ThreatSignal, EntityId};
-use super::super::window_store::{WindowStore, W_5S};
+use super::super::window_store::WindowStore;
 use super::BehaviourRule;
 
 pub struct T1055Injection;

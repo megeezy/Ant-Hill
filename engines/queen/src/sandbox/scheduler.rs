@@ -6,7 +6,9 @@
 //!   LOW     < 0.20     → best-effort, shed when queue > 32
 
 use anthill_core::config::SandboxConfig;
+use anyhow::Result;
 use std::collections::VecDeque;
+use std::path::Path;
 use std::time::{Duration, Instant};
 use tokio::sync::{Mutex, Semaphore};
 use tracing::{debug, info, warn};
@@ -67,8 +69,8 @@ impl SandboxScheduler {
     /// Decide whether to skip sandbox or queue the file.
     pub fn classify(
         &self,
-        path: &str,
-        sha256: &str,
+        _path: &str,
+        _sha256: &str,
         ml_score: f32,
         is_signed: bool,
         known_clean: bool,
@@ -84,6 +86,12 @@ impl SandboxScheduler {
 
     /// Enqueue a file for sandboxing. Returns false if queue is full and the
     /// request was shed (LOW priority only).
+    pub async fn queue_verdict(&self, _sha256: &str, _file_path: &Path) -> Result<f32> {
+        // [STUB] gVisor pool logic scheduled for Phase 2.
+        // For now, return a neutral score.
+        Ok(0.5)
+    }
+
     pub async fn enqueue(&self, req: SandboxRequest) -> bool {
         let mut q = self.queue.lock().await;
         let depth = q.len();

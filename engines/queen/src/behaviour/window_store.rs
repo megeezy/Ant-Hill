@@ -3,7 +3,7 @@
 //! Each window is a fixed-capacity ring buffer of (timestamp_ms, weight) pairs.
 //! Entries older than the window TTL are lazily evicted on read.
 
-use anthill_core::{config::BehaviourConfig, proto::{ThreatSignal, threat_signal}, EntityId, RuleId};
+use anthill_core::{config::BehaviourConfig, proto::{ThreatSignal, threat_signal}, EntityId};
 use dashmap::DashMap;
 use std::collections::VecDeque;
 

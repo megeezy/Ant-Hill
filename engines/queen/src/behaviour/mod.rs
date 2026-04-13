@@ -3,7 +3,7 @@
 pub mod rules;
 pub mod window_store;
 
-use anthill_core::{config::BehaviourConfig, proto::ThreatSignal, EntityId, RuleId};
+use anthill_core::{config::BehaviourConfig, proto::ThreatSignal};
 use window_store::WindowStore;
 use rules::{BehaviourRule, ALL_RULES};
 

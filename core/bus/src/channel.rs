@@ -16,6 +16,7 @@ pub type BusReceiver = mpsc::Receiver<ThreatSignal>;
 
 /// A handle to all agent channels. Clone senders and pass them to agents.
 pub struct Bus {
+    #[allow(dead_code)]
     pub file_tx: BusSender,
     pub proc_tx: BusSender,
     pub net_tx:  BusSender,

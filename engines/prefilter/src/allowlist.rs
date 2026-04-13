@@ -5,7 +5,7 @@ use anthill_core::proto::{ThreatSignal, threat_signal};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AllowlistConfig {
     #[serde(default)]
     pub processes: Vec<String>,
@@ -63,15 +63,6 @@ impl Allowlist {
                 self.processes.iter().any(|p| pe.comm == *p || pe.exe_path.contains(p.as_str()))
             }
             _ => false,
-        }
-    }
-}
-
-impl Default for AllowlistConfig {
-    fn default() -> Self {
-        Self {
-            processes: vec![],
-            paths: vec![],
         }
     }
 }

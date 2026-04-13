@@ -18,6 +18,7 @@ pub use forensics::ForensicCapture;
 pub struct SoldierLayer {
     safety:      SafetyChecker,
     forensics:   ForensicCapture,
+    #[allow(dead_code)]
     cfg:         ResponseConfig,
     persistence: PersistenceConfig,
 }

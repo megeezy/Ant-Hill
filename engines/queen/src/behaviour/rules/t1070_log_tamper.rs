@@ -7,6 +7,7 @@ use anthill_core::{proto::{ThreatSignal, threat_signal}, EntityId};
 use super::super::window_store::WindowStore;
 use super::BehaviourRule;
 
+#[allow(dead_code)]
 const LOGGING_DAEMONS: &[&str] = &[
     "journald", "systemd-journald", "syslogd", "rsyslogd",
     "syslog-ng", "logrotate", "logd", "auditd",
