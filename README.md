@@ -92,29 +92,51 @@ Anthill is built on a high-performance **Five-Tier Distributed Strategy**:
 
 ---
 
-## Project Structure
+## Project Structure (Industrial Hierarchy)
+
+Anthill is architected as an industrial-scale telemetry and detection ecosystem. The workspace is categorized into specialized domains to ensure high modularity and platform-agnostic detection logic.
 
 ```text
 Ant-Hill/
-├── bin/anthill           # Entry point — Supervisor and lifecycle manager
+├── bin/
+│   └── anthill           # Main Hive Supervisor (Life-cycle & Orchestration)
 │
-├── crates/               # Rust workspace members
-│   ├── anthill-core      # Protobuf definitions, generic types, shared config
-│   ├── anthill-bus       # High-speed telemetry relay (Pheromone Bus)
-│   ├── anthill-prefilter # Burst suppression and noise reduction
-│   ├── anthill-queen     # The detection engine (SIG + BEH + ML)
-│   ├── anthill-soldier   # Response layer (SafetyChecker + Forensics)
-│   ├── anthill-agents    # Worker Ants (eBPF, pcap, file monitors)
-│   ├── anthill-db        # Persistence (SQLite for verdicts, Sled for cache)
-│   ├── anthill-tui       # Terminal-based real-time dashboard
-│   └── anthill-api       # gRPC external interface
+├── core/                 # Shared Infrastructure & Foundations
+│   ├── common/           # Unified config, types, and Protobuf re-exports
+│   ├── bus/              # High-speed Pheromone Relay (Telemetry bus)
+│   ├── db/               # Persistence Layer (SQLite + Sled)
+│   └── protocol/         # Protobuf contract definitions (.proto)
 │
-├── ebpf/                 # C-level eBPF kprobes source
-├── ml/pipeline/          # Python training and drift monitoring pipeline
-├── config/               # TOML profiles (enterprise, developer, personal)
-├── proto/                # Shared Protobuf source definitions
-├── scripts/              # Launchers and helper scripts
-└── storage/              # (Local Dev) SQLite, Sled, and Vault storage
+├── engines/              # Advanced Swarm Intelligence
+│   ├── queen/            # Behavioral Correlation Engine & State logic
+│   ├── prefilter/        # Signal deduplication and burst suppression
+│   └── intelligence/     # [STUB] ONNX ML models & drift monitoring
+│
+├── platform/             # Specialized Worker Ants (Sensor Probes)
+│   ├── linux/
+│   │   ├── agents/       # Process, File, and Network kprobes
+│   │   └── ebpf/         # C-level BPF kprobe source & maps
+│   ├── windows/          # [ROADMAP] ETW & Kernel callback providers
+│   └── darwin/           # [ROADMAP] FSEvents & SkyLight providers
+│
+├── response/             # Active Defense & Remediation
+│   └── soldier/          # Active response orchestrator (Safety + Forensics)
+│
+├── ui/                   # Frontend & External Interfaces
+│   ├── tui/              # Terminal-based real-time Dashboard
+│   └── api/              # gRPC API for external fleet management
+│
+├── infrastructure/       # DevOps & Deployment Scaffolding
+│   ├── docker/           # Containerization & local simulation
+│   └── k8s/              # Kubernetes manifests for fleet nodes
+│
+├── docs/                 # Engineering Documents
+│   ├── rfc/              # Design proposals & architectural changes
+│   └── api/              # gRPC and shared logic documentation
+│
+├── benchmarks/           # Latency and throughput evaluation suites
+├── scripts/              # Swarm automation & stress-test utilities
+└── storage/              # [LOCAL] Vault, Forensics, and DB storage
 ```
 
 ---

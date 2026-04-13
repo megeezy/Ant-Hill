@@ -1,15 +1,15 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/anthill-core",
-    "crates/anthill-prefilter",
-    "crates/anthill-bus",
-    "crates/anthill-agents",
-    "crates/anthill-queen",
-    "crates/anthill-soldier",
-    "crates/anthill-db",
-    "crates/anthill-tui",
-    "crates/anthill-api",
+    "core/common",
+    "core/bus",
+    "core/db",
+    "engines/queen",
+    "engines/prefilter",
+    "platform/linux/agents",
+    "response/soldier",
+    "ui/tui",
+    "ui/api",
     "bin/anthill",
 ]
 
@@ -75,15 +75,15 @@ directories = "5"
 chrono      = { version = "0.4", features = ["serde"] }
 
 # Workspace crates
-anthill-core       = { path = "crates/anthill-core" }
-anthill-prefilter  = { path = "crates/anthill-prefilter" }
-anthill-bus        = { path = "crates/anthill-bus" }
-anthill-agents     = { path = "crates/anthill-agents" }
-anthill-queen      = { path = "crates/anthill-queen" }
-anthill-soldier    = { path = "crates/anthill-soldier" }
-anthill-db         = { path = "crates/anthill-db" }
-anthill-tui        = { path = "crates/anthill-tui" }
-anthill-api        = { path = "crates/anthill-api" }
+anthill-core       = { path = "core/common" }
+anthill-prefilter  = { path = "engines/prefilter" }
+anthill-bus        = { path = "core/bus" }
+anthill-agents     = { path = "platform/linux/agents" }
+anthill-queen      = { path = "engines/queen" }
+anthill-soldier    = { path = "response/soldier" }
+anthill-db         = { path = "core/db" }
+anthill-tui        = { path = "ui/tui" }
+anthill-api        = { path = "ui/api" }
 
 [profile.release]
 opt-level   = 3
